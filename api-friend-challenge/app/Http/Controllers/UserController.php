@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\HttpResponses;
+use App\Traits\HttpResponses;
 use App\Actions\User\CreateUser;
 use App\Actions\User\UpdateUser;
 use Illuminate\Http\JsonResponse;

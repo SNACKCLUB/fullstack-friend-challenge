@@ -9,8 +9,8 @@ export default function AuthLayout({
   const appName: string = process.env.APP_NAME as string;
 
   return (
-    <main className="grid grid-cols-[3fr,1fr] h-dvh">
-      <div className="grid grid-rows-[1fr,auto] bg-gray-950/50">
+    <main className="grid grid-cols-[1fr] lg:grid-cols-[2fr,2fr] xl:grid-cols-[3fr,1.1fr] h-dvh">
+      <div className="hidden lg:grid grid-rows-[1fr,auto] bg-gray-950/50">
         <Logo
           alt={appName}
           size={200}

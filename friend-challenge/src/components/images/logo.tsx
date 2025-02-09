@@ -21,7 +21,7 @@ export const Logo = ({
     <div className={containerClassName}>
       <figure>
         <Image
-          className={cn("w-[200px] rounded-full", imageClassName)}
+          className={cn("w-[200px] rounded-full shadow-md", imageClassName)}
           src={logoImg}
           alt={alt}
           width={size}

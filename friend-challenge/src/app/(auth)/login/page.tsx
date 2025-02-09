@@ -1,3 +1,4 @@
+import LoginForm from "@/components/forms/loginForm";
 import { Logo } from "@/components/images/logo";
 import { Metadata } from "next";
 import Link from "next/link";
@@ -11,7 +12,7 @@ export default function LoginPage() {
   const appName: string = process.env.APP_NAME as string;
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col gap-10 items-center justify-center">
       <Logo
         appName={appName}
         alt={appName}
@@ -19,7 +20,13 @@ export default function LoginPage() {
         imageClassName="w-[125px]"
         containerClassName="flex flex-col gap-4 items-center justify-center"
       />
-      <Link href="/register">Register</Link>
+      <LoginForm />
+      <div className="flex gap-2 text-sm">
+        <span>Don&apos;t have an account?</span>
+        <Link href="/register" className="hover:text-red-400">
+          Register Now
+        </Link>
+      </div>
     </div>
   );
 }

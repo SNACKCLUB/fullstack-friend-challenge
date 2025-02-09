@@ -5,7 +5,7 @@ export const Rights = () => {
 
   return (
     <footer className="text-sm text-center p-2">
-      <p>{rights}</p>
+      <small>{rights}</small>
     </footer>
   );
 };

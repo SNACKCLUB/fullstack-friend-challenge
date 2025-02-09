@@ -17,10 +17,10 @@ class FriendRequestResource extends JsonResource
         return [
             'id' => $this->id,
             'user_id' => $this->user_id,
-            'user' => new UserResource($this->user),
+            'user' => new UserResource($this->whenLoaded('user')),
             'requested_user_id' => $this->requested_user_id,
-            'requested_user' => new UserResource($this->requested_user),
-            'status' => $this->title,
+            'requested_user' => new UserResource($this->whenLoaded('requestedUser')),
+            'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

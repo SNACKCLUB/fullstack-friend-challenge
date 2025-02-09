@@ -18,7 +18,8 @@ class StoreFriendRequestRequest extends FormRequest
         return [
             "requested_user_id" => [
                 "required",
-                Rule::unique('users')->where('status' == FriendRequestStatus::PENDING)
+                Rule::unique('users')->where('status' == FriendRequestStatus::PENDING),
+                Rule::exists('users', 'id')
             ]
         ];
     }

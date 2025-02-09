@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\FriedRequest\CreateFriendRequest;
-use App\Actions\FriedRequest\UpdateFriendRequest;
+use App\Actions\FriendRequest\UpdateFriendRequest;
+use App\Actions\FriendRequest\CreateFriendRequest;
 use App\Http\Requests\StoreFriendRequestRequest;
 use App\Http\Requests\UpdateFriendRequestRequest;
 use App\Http\Resources\FriendRequestResource;

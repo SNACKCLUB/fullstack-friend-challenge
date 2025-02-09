@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\FriedRequest;
+namespace App\Actions\FriendRequest;
 
 use App\Models\FriendRequest;
 

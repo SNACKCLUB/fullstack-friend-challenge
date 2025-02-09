@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\FriendRequestController;
 use Illuminate\Support\Facades\Route;
 
 // Welcome api route
@@ -24,4 +25,5 @@ Route::prefix('auth')->group(function () {
 });
 
 // Dashboard routes
-Route::apiResource('/user', UserController::class);
+Route::apiResource('/user', UserController::class)->middleware("auth:sanctum");
+Route::apiResource('/friend-request', FriendRequestController::class)->middleware("auth:sanctum");

@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import InputGroup from "../ui/input-group";
 
-const loginFormSchema = z.object({
+const registerFormSchema = z.object({
   email: z.string().nonempty("Email is required!").email("Email is invalid!"),
   password: z
     .string()
@@ -13,18 +13,18 @@ const loginFormSchema = z.object({
     .min(8, "password must have at least 8 characters"),
 });
 
-type LoginFormData = z.infer<typeof loginFormSchema>;
+type RegisterFormData = z.infer<typeof registerFormSchema>;
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginFormSchema),
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerFormSchema),
   });
 
-  const onSubmit = (data: LoginFormData) => {
+  const onSubmit = (data: RegisterFormData) => {
     console.log("xxxx", data);
   };
 
@@ -62,7 +62,7 @@ export default function LoginForm() {
           className="bg-gray-800 w-full h-[40px] rounded-md outline-none hover:outline-red-400"
           type="submit"
         >
-          Login
+          Register
         </button>
       </div>
     </form>

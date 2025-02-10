@@ -29,7 +29,7 @@ export const Logo = ({
           priority
         />
       </figure>
-      {appName && <small className="font-sm">{appName}</small>}
+      {appName && <span>{appName}</span>}
     </div>
   );
 };

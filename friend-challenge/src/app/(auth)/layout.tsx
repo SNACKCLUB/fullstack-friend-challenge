@@ -21,7 +21,7 @@ export default function AuthLayout({
       <div>
         <aside className="grid grid-rows-[1fr,auto] h-full ">
           {children}
-          <Rights />
+          <Rights className="block lg:hidden" />
         </aside>
       </div>
     </main>

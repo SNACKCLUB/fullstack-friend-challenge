@@ -20,7 +20,7 @@ function InputGroup({ children }: InputGroupProps) {
       className={cn(
         "flex flex-col gap-2",
         "[&_input]:h-[40px] [&_input]:px-4 [&_input]:rounded-md",
-        "[&_input]:bg-gray-950/50 [&_input]:outline-none [&_input]:focus:outline-red-400"
+        "[&_input]:bg-gray-950/50 [&_input]:outline-none focus:[&_input]:outline-red-400"
       )}
     >
       {children}

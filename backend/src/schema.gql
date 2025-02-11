@@ -51,6 +51,7 @@ type Mutation {
   removeUser(id: ID!): Boolean!
   respondToFriendRequest(id: String!, updateFriendshipInput: UpdateFriendshipInput!): Friendship!
   sendFriendRequest(createFriendshipInput: CreateFriendshipInput!): Friendship!
+  signUp(signUpInput: SignUpInput!): Auth!
   updateUser(id: ID!, updateUserInput: UpdateUserInput!): User!
 }
 
@@ -78,6 +79,12 @@ type Query {
   pendingFriendRequests: [Friendship!]!
   user(id: ID!): User!
   users: [User!]!
+}
+
+input SignUpInput {
+  email: String!
+  name: String!
+  password: String!
 }
 
 input UpdateFriendshipInput {

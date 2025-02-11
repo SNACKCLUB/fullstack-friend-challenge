@@ -43,7 +43,7 @@ export default function AuthPage() {
         }
       } else {
         const { data: signUpData } = await signUp({
-          variables: { input: data as SignUpInput },
+          variables: { signUpInput: data as SignUpInput },
         });
         if (signUpData?.signUp.token) {
           localStorage.setItem('token', signUpData.signUp.token);

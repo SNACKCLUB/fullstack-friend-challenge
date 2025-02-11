@@ -19,8 +19,8 @@ export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const router = useRouter();
 
-  const [login] = useMutation<{ login: AuthResponse }, { input: LoginInput }>(LOGIN_MUTATION);
-  const [signUp] = useMutation<{ signUp: AuthResponse }, { input: SignUpInput }>(SIGNUP_MUTATION);
+  const [login] = useMutation<{ login: AuthResponse }, { loginInput: LoginInput }>(LOGIN_MUTATION);
+  const [signUp] = useMutation<{ signUp: AuthResponse }, { signUpInput: SignUpInput }>(SIGNUP_MUTATION);
 
   const form = useForm<LoginFormData | SignUpFormData>({
     resolver: zodResolver(isLogin ? loginSchema : signUpSchema),
@@ -35,11 +35,11 @@ export default function AuthPage() {
     try {
       if (isLogin) {
         const { data: loginData } = await login({
-          variables: { input: data as LoginInput },
+          variables: { loginInput: data as LoginInput },
         });
         if (loginData?.login.token) {
           localStorage.setItem('token', loginData.login.token);
-          router.push('/dashboard');
+          router.push('/profile');
         }
       } else {
         const { data: signUpData } = await signUp({
@@ -47,7 +47,7 @@ export default function AuthPage() {
         });
         if (signUpData?.signUp.token) {
           localStorage.setItem('token', signUpData.signUp.token);
-          router.push('/dashboard');
+          router.push('/profile');
         }
       }
     } catch (err) {

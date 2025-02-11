@@ -1,5 +1,3 @@
-"use client";
-
 import { LoginFormData } from "@/components/forms/loginForm";
 import { createSession } from "@/lib/session";
 import { useApi } from "@/lib/useApi";

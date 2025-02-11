@@ -29,6 +29,7 @@ export default function LoginForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
@@ -43,9 +44,13 @@ export default function LoginForm() {
       setLoading(true);
       await signIn(data);
       router.push("/dashboard");
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch ({ response }: any) {
+      for (const field in response.data?.errors) {
+        setError(field as keyof LoginFormData, {
+          type: "manual",
+          message: response.data.errors[field],
+        });
+      }
       toast({
         variant: "destructive",
         title: "User not found or invalid data!",

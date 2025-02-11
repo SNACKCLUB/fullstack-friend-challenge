@@ -4,6 +4,10 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import InputGroup from "../ui/input-group";
+import { registerUser } from "@/app/actions/auth/register";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 const registerFormSchema = z.object({
   name: z
@@ -24,13 +28,35 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
   });
 
-  const onSubmit = (data: RegisterFormData) => {
-    console.log("xxxx", data);
+  const { toast } = useToast();
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      setLoading(true);
+      await registerUser(data);
+      router.push("/login");
+
+      toast({
+        title: "Register completed successfully!",
+      });
+    } catch ({ response }: any) {
+      for (const field in response.data?.errors) {
+        setError(field as keyof RegisterFormData, {
+          type: "manual",
+          message: response.data.errors[field],
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -76,8 +102,9 @@ export default function RegisterForm() {
         <button
           className="bg-gray-800 w-full h-[40px] rounded-md outline-none hover:outline-red-400"
           type="submit"
+          disabled={loading}
         >
-          Register
+          {loading ? "Registering..." : "Register"}
         </button>
       </div>
     </form>

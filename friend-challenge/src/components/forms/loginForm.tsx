@@ -1,19 +1,28 @@
 "use client";
 
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { signIn } from "@/app/actions/auth/signIn";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
+
 import InputGroup from "../ui/input-group";
 
 const loginFormSchema = z.object({
-  email: z.string().nonempty("Email is required!").email("Email is invalid!"),
+  email: z
+    .string()
+    .nonempty("Email is required!")
+    .email("Email is invalid!")
+    .trim(),
   password: z
     .string()
     .nonempty("Password is required!")
-    .min(8, "Password must have at least 8 characters"),
+    .min(8, "Password must have at least 8 characters")
+    .trim(),
 });
 
-type LoginFormData = z.infer<typeof loginFormSchema>;
+export type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export default function LoginForm() {
   const {
@@ -24,8 +33,21 @@ export default function LoginForm() {
     resolver: zodResolver(loginFormSchema),
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("xxxx", data);
+  const { toast } = useToast();
+  const router = useRouter();
+
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      await signIn(data);
+      router.push("/dashboard");
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "User not found or invalid data!",
+      });
+    }
   };
 
   return (

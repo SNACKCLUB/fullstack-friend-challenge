@@ -18,7 +18,7 @@ const registerFormSchema = z.object({
     .min(8, "Password must have at least 8 characters"),
 });
 
-type RegisterFormData = z.infer<typeof registerFormSchema>;
+export type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 export default function RegisterForm() {
   const {

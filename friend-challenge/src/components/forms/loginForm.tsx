@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
 import InputGroup from "../ui/input-group";
+import { useState } from "react";
 
 const loginFormSchema = z.object({
   email: z
@@ -35,9 +36,11 @@ export default function LoginForm() {
 
   const { toast } = useToast();
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = async (data: LoginFormData) => {
     try {
+      setLoading(true);
       await signIn(data);
       router.push("/dashboard");
 
@@ -47,6 +50,8 @@ export default function LoginForm() {
         variant: "destructive",
         title: "User not found or invalid data!",
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,8 +88,9 @@ export default function LoginForm() {
         <button
           className="bg-gray-800 w-full h-[40px] rounded-md outline-none hover:outline-red-400"
           type="submit"
+          disabled={loading}
         >
-          Login
+          {loading ? "logging in..." : "login"}
         </button>
       </div>
     </form>

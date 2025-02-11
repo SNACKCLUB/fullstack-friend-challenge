@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -32,6 +33,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function (User $user) {
+            $user->image ??= "https://i.pravatar.cc/300?u=" . Str::random(10);
+            $user->email_verified_at ??= now();
+            $user->remember_token ??= Str::random(10);
+        });
     }
 
     public function friendRequests(): BelongsToMany

@@ -1,5 +1,4 @@
 #!/bin/sh
-# docker-entrypoint.sh
 
 # Espera o Postgres estar pronto
 echo "Waiting for PostgreSQL to be ready..."
@@ -12,10 +11,10 @@ echo "PostgreSQL is ready!"
 echo "Running migrations..."
 pnpm prisma migrate deploy
 
-# Executa os seeds se necessário
+# Executa os seeds se estiver em desenvolvimento
 if [ "$NODE_ENV" = "development" ]; then
   echo "Running seeds..."
-  pnpm prisma db seed
+  pnpm prisma:seed
 fi
 
 # Inicia a aplicação

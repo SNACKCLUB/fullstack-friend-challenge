@@ -1,45 +1,53 @@
-# Dockerfile
+# Build stage
 FROM node:20-alpine AS builder
 
-# Adiciona curl para healthcheck
+# Install necessary tools
 RUN apk add --no-cache curl
 
-# Instala o pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Install pnpm using npm instead of corepack
+RUN npm install -g pnpm
 
 WORKDIR /app
 
-# Copia os arquivos de configuração
+# Copy package files
 COPY package.json pnpm-lock.yaml ./
 
-# Instala as dependências
+# Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copia o resto do código
+# Copy the rest of the code
 COPY . .
 
-# Gera o Prisma Client
+# Generate Prisma Client
 RUN pnpm prisma generate
 
-# Compila o projeto
+# Build the project
 RUN pnpm build
 
-# Imagem de produção
+# Production stage
 FROM node:20-alpine
 
 WORKDIR /app
 
-# Instala o pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Install pnpm using npm
+RUN npm install -g pnpm
 
-# Copia os arquivos necessários do builder
+# Copy necessary files from builder
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 COPY --from=builder /app/package.json ./
 
-# Expõe a porta 3000
+# Add netcat for the health check in setup-db.sh
+RUN apk add --no-cache netcat-openbsd
+
+# Copy and make the setup script executable
+COPY setup-db.sh ./
+RUN chmod +x setup-db.sh
+
+# Expose port 3000
 EXPOSE 3000
 
-# Comando para iniciar a aplicação
+# Use the setup script as entrypoint
+ENTRYPOINT ["./setup-db.sh"]
 CMD ["pnpm", "start:prod"]

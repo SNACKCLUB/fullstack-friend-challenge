@@ -5,7 +5,7 @@ import { Field, ObjectType, registerEnumType } from '@nestjs/graphql';
 export enum FriendshipStatus {
   PENDING = 'PENDING',
   ACCEPTED = 'ACCEPTED',
-  DECLINED = 'DECLINED',
+  REJECTED = 'REJECTED',
 }
 
 registerEnumType(FriendshipStatus, {

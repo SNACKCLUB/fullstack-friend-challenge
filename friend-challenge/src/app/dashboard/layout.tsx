@@ -1,3 +1,4 @@
+import { Rights } from "@/components/footer/rights";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,8 +12,9 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="grid grid-cols-[1fr] lg:grid-cols-[2fr,2fr] xl:grid-cols-[1fr,3fr] h-dvh">
+    <main className="grid grid-rows-[1fr] h-dvh">
       {children}
+      <Rights></Rights>
     </main>
   );
 }

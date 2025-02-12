@@ -5,19 +5,21 @@ import Image from "next/image";
 import { useContext, useState } from "react";
 import { UserContext } from "../contexts/user";
 import { Bell, Ellipsis, LogOut } from "lucide-react";
-import { Tooltip } from "../ui/tooltip/tooltip";
+import { Tooltip } from "../ui/tooltip";
 import { logOut as logOutRequest } from "@/app/actions/auth/logout";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { UsersList } from "../users/users-list";
+import { Popover } from "../ui/popover";
+import { UserNotification } from "../users/user-notification";
 
 type PanelProps = {
   className?: string;
 };
 
 export const UserPanel = ({ className }: PanelProps) => {
-  const [loading, setLoading] = useState<boolean>();
+  const [loading, setLoading] = useState<boolean>(false);
   const { user } = useContext(UserContext);
   const { toast } = useToast();
   const router = useRouter();
@@ -74,11 +76,7 @@ export const UserPanel = ({ className }: PanelProps) => {
             "hover:[&>button]:text-red-400 [&>button]:transition-colors"
           )}
         >
-          <Tooltip title="Notifications">
-            <button disabled={loading}>
-              <Bell size={18} />
-            </button>
-          </Tooltip>
+          <UserNotification loading={loading} />
 
           <Tooltip title="Logout">
             <button onClick={handleLogOut} disabled={loading}>

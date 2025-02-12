@@ -1,0 +1,123 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Auth {
+  token: String!
+  user: User!
+}
+
+input CreateFriendshipInput {
+  receiverId: String!
+}
+
+input CreateUserInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type FriendRequest {
+  createdAt: DateTime!
+  id: String!
+  receiver: User!
+  sender: User!
+  status: String!
+}
+
+type Friendship {
+  createdAt: DateTime!
+  id: ID!
+  receiver: User!
+  receiverId: String!
+  sender: User!
+  senderId: String!
+  status: FriendshipStatus!
+  updatedAt: DateTime!
+}
+
+enum FriendshipStatus {
+  ACCEPTED
+  PENDING
+  REJECTED
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  login(loginInput: LoginInput!): Auth!
+  removeFriend(id: ID!): Boolean!
+  removeUser(id: ID!): Boolean!
+  respondToFriendRequest(id: String!, updateFriendshipInput: UpdateFriendshipInput!): Friendship!
+  sendFriendRequest(createFriendshipInput: CreateFriendshipInput!): Friendship!
+  signUp(signUpInput: SignUpInput!): Auth!
+  updateUser(id: ID!, updateUserInput: UpdateUserInput!): User!
+}
+
+type Notification {
+  createdAt: DateTime!
+  data: String
+  id: ID!
+  message: String!
+  read: Boolean!
+  type: NotificationType!
+  updatedAt: DateTime!
+  userId: String!
+}
+
+enum NotificationType {
+  FRIEND_REQUEST
+  FRIEND_REQUEST_ACCEPTED
+  FRIEND_REQUEST_REJECTED
+}
+
+type Query {
+  me: User!
+  myFriends: [User!]!
+  myFriendships: [Friendship!]!
+  pendingFriendRequests: [Friendship!]!
+  searchUsers(input: SearchUsersInput!): [User!]!
+  user(id: ID!): User!
+  users: [User!]!
+}
+
+input SearchUsersInput {
+  query: String!
+}
+
+input SignUpInput {
+  email: String!
+  name: String!
+  password: String!
+}
+
+input UpdateFriendshipInput {
+  status: FriendshipStatus!
+}
+
+input UpdateUserInput {
+  email: String
+  name: String
+  password: String
+}
+
+type User {
+  createdAt: DateTime!
+  email: String!
+  friends: [User!]
+  id: ID!
+  name: String!
+  notifications: [Notification!]
+  receivedFriendRequests: [FriendRequest!]
+  sentFriendRequests: [FriendRequest!]
+  updatedAt: DateTime!
+}

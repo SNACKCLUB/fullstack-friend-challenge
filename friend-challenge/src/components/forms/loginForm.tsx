@@ -45,7 +45,7 @@ export default function LoginForm() {
       await signIn(data);
       router.push("/dashboard");
     } catch ({ response }: any) {
-      for (const field in response.data?.errors) {
+      for (const field in response?.data?.errors) {
         setError(field as keyof LoginFormData, {
           type: "manual",
           message: response.data.errors[field],

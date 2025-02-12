@@ -33,8 +33,11 @@ export function UserProvider({ children }: UserProviderData) {
       } catch ({ response }: any) {
         toast({
           variant: "destructive",
-          title: `Unauthorized access! ${response?.statusText}`,
+          title: `Unauthorized access! Please login again.`,
         });
+
+        if (response?.statusText) console.error(response?.statusText);
+
         deleteSession();
         router.push("/login");
       }

@@ -10,11 +10,11 @@ export const Header = () => {
 
   const options = [
     {
-      label: "Meus Amigos",
+      label: "Seus Amigos",
       path: "/friends",
     },
     {
-      label: "Solictações de Amizade",
+      label: "Solictações",
       path: "/requests",
     },
   ];

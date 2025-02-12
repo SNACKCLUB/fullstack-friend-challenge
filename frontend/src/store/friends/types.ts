@@ -7,11 +7,14 @@ type FriendRelationTypes = {
 type FriendStatusTypes = "ACCEPTED" | "PENDING" | "DECLINED";
 
 type FriendStoreTypes = {
-  friends: FriendApiTypes[];
-  fetchFriends: ({ userId, status }: FriendRelationTypes) => Promise<void>;
-  removeFriend: ({ userId, friendId }: FriendRelationTypes) => Promise<void>;
-  addFriend: (friendId: FriendRelationTypes["friendId"]) => Promise<void>;
-  updateFriends: (status: FriendStatusTypes) => Promise<void>;
+  friendships: FriendApiTypes[];
+  fetchFriendships: ({ userId, status }: FriendRelationTypes) => Promise<void>;
+  removeFriendship: ({
+    userId,
+    friendId,
+  }: FriendRelationTypes) => Promise<void>;
+  addFriendship: (friendId: FriendRelationTypes["friendId"]) => Promise<void>;
+  updateFriendship: (status: FriendStatusTypes) => Promise<void>;
   updateFriendshipStatus: ({
     friendId,
     status,

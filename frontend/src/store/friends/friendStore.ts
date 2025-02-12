@@ -14,44 +14,44 @@ import {
 import { useAuthStore } from "../auth/authStore";
 
 const useFriendStore = create<FriendStoreTypes>((set) => ({
-  friends: [],
-  fetchFriends: async ({ userId, status }: FriendRelationTypes) => {
+  friendships: [],
+  fetchFriendships: async ({ userId, status }: FriendRelationTypes) => {
     try {
       const friends = await getFriends({ userId, status });
-      set({ friends });
+      set({ friendships: friends });
     } catch (error) {
       console.error("Failed to fetch friends:", error);
     }
   },
-  updateFriends: async (status: FriendStatusTypes) => {
+  updateFriendship: async (status: FriendStatusTypes) => {
     const { user } = useAuthStore.getState();
     if (user) {
-      const updatedFriends = await getFriends({
+      const updatedFriend = await getFriends({
         userId: user.id,
         status,
       });
-      set({ friends: updatedFriends });
+      set({ friendships: updatedFriend });
     }
   },
-  removeFriend: async ({ friendId }: FriendRelationTypes) => {
+  removeFriendship: async ({ friendId }: FriendRelationTypes) => {
     try {
       const { user } = useAuthStore.getState();
       if (user) {
         await removeFriend({ userId: user.id, friendId });
-        await useFriendStore.getState().updateFriends("ACCEPTED");
+        await useFriendStore.getState().updateFriendship("ACCEPTED");
         toast.success("Friend deleted successfully");
       }
     } catch (error) {
       toast.error("Failed to delete friend");
     }
   },
-  addFriend: async (friendId: FriendRelationTypes["friendId"]) => {
+  addFriendship: async (friendId: FriendRelationTypes["friendId"]) => {
     try {
       const { user } = useAuthStore.getState();
 
       if (user) {
         await addFriend({ userId: user.id, friendId });
-        await useFriendStore.getState().updateFriends("ACCEPTED");
+        await useFriendStore.getState().updateFriendship("ACCEPTED");
         toast.success("Friend added successfully");
       }
     } catch (error) {
@@ -67,7 +67,7 @@ const useFriendStore = create<FriendStoreTypes>((set) => ({
         toast.success(`Friend ${status} successfully`);
         await useFriendStore
           .getState()
-          .fetchFriends({ userId: user.id, status: "PENDING" });
+          .fetchFriendships({ userId: user.id, status: "PENDING" });
       }
     } catch (error) {
       toast.error("Failed to update friend");

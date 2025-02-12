@@ -33,8 +33,8 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <ConfigProvider theme={theme}>
       <ToastContainer />
-      <div style={{ maxWidth: "100vw", overflowX: "hidden" }}>
-        {router.pathname !== "/" && <Header />}
+      {router.pathname !== "/" && <Header />}
+      <div className="containerApp">
         <Component {...pageProps} />
         {/* <Footer /> */}
       </div>

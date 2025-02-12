@@ -58,7 +58,11 @@ export const friendshipController = {
     }
   },
 
-  async getFriends(request: Request, response: Response, next: NextFunction) {
+  async getFriendships(
+    request: Request,
+    response: Response,
+    next: NextFunction
+  ) {
     try {
       const { userId } = request.params;
       const { status } = request.query as {

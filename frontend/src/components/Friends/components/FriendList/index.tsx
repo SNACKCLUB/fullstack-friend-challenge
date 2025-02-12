@@ -6,29 +6,33 @@ import { List, Typography } from "antd";
 import { MdOutlineDeleteSweep } from "react-icons/md";
 
 export const FriendList = () => {
-  const { friends, fetchFriends, removeFriend } = useFriendStore(
+  const { friendships, fetchFriendships, removeFriendship } = useFriendStore(
     (state) => state
   );
   const { user } = useAuthStore((state) => state);
 
   useEffect(() => {
     if (user) {
-      fetchFriends({ userId: user.id, status: "ACCEPTED" });
+      fetchFriendships({ userId: user.id, status: "ACCEPTED" });
     }
   }, [user]);
 
   const handleRemoveFriend = (friendId: string) => {
     if (user) {
-      removeFriend({ userId: user.id, friendId });
+      removeFriendship({ userId: user.id, friendId });
     }
   };
 
   return (
     <List
       size="large"
-      header={<div>Lista de amigos</div>}
+      header={
+        <Typography.Title level={5} style={{ margin: 0 }}>
+          Seus amigos
+        </Typography.Title>
+      }
       bordered
-      dataSource={friends}
+      dataSource={friendships}
       renderItem={(item) => (
         <List.Item>
           <div className={styles.content}>

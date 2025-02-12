@@ -41,7 +41,7 @@ friendshipRouter.post(
 friendshipRouter.get(
   "/:userId/friends",
   async (request: Request, response: Response, next: NextFunction) => {
-    return friendshipController.getFriends(request, response, next);
+    return friendshipController.getFriendships(request, response, next);
   }
 );
 

@@ -11,7 +11,7 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <main className="grid grid-cols-[1fr] lg:grid-cols-[2fr,2fr] xl:grid-cols-[3fr,1.1fr] h-dvh">
+    <main className="grid grid-cols-[1fr] lg:grid-cols-[2fr,2fr] xl:grid-cols-[1fr,3fr] h-dvh">
       {children}
     </main>
   );

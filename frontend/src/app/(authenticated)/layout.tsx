@@ -1,5 +1,6 @@
 'use client';
 
+import { Toaster } from '@/components/ui/toaster';
 import { ApolloWrapper } from '@/lib/apollo-provider';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -18,5 +19,10 @@ export default function AuthenticatedLayout({
     }
   }, [router]);
 
-  return <ApolloWrapper>{children}</ApolloWrapper>;
+  return (
+    <ApolloWrapper>
+      {children}
+      <Toaster />
+    </ApolloWrapper>
+  )
 }

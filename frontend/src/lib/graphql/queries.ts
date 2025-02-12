@@ -21,6 +21,16 @@ export const GET_CURRENT_USER = gql`
         status
         createdAt
       }
+      sentFriendRequests {
+        id
+        receiver {
+          id
+          name
+          email
+        }
+        status
+        createdAt
+      }
     }
   }
 `;
@@ -31,6 +41,42 @@ export const SEARCH_USERS = gql`
       id
       name
       email
+    }
+  }
+`;
+
+export const SEND_FRIEND_REQUEST = gql`
+  mutation SendFriendRequest($createFriendshipInput: CreateFriendshipInput!) {
+    sendFriendRequest(createFriendshipInput: $createFriendshipInput) {
+      id
+      sender {
+        id
+        name
+      }
+      receiver {
+        id
+        name
+      }
+      status
+      createdAt
+    }
+  }
+`;
+
+export const RESPOND_TO_FRIEND_REQUEST = gql`
+  mutation RespondToFriendRequest($id: String!, $updateFriendshipInput: UpdateFriendshipInput!) {
+    respondToFriendRequest(id: $id, updateFriendshipInput: $updateFriendshipInput) {
+      id
+      status
+      sender {
+        id
+        name
+      }
+      receiver {
+        id
+        name
+      }
+      createdAt
     }
   }
 `;

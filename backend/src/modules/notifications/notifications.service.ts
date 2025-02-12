@@ -37,8 +37,10 @@ export class NotificationsService {
     });
   }
 
-  async notifyFriendRequest(receiverId: string, sender: any) {
+  async notifyFriendRequest(id: string, receiverId: string, sender: any) {
+    console.log(id);
     await this.sendToUser(receiverId, 'friendRequest', {
+      id,
       type: 'FRIEND_REQUEST',
       sender: {
         id: sender.id,

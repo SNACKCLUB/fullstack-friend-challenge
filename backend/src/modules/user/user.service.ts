@@ -17,13 +17,8 @@ export class UserService {
       throw new ConflictException('Email already registered');
     }
 
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-
     return this.prisma.user.create({
-      data: {
-        ...data,
-        password: hashedPassword,
-      },
+      data,
     });
   }
 
@@ -31,9 +26,53 @@ export class UserService {
     return this.prisma.user.findMany();
   }
 
+  async searchUsers(query: string, currentUserId: string) {
+    return this.prisma.user.findMany({
+      where: {
+        OR: [
+          { name: { contains: query, mode: 'insensitive' } },
+          { email: { contains: query, mode: 'insensitive' } },
+        ],
+        NOT: {
+          id: currentUserId,
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+      },
+    });
+  }
+
   async findOne(id: string) {
     const user = await this.prisma.user.findUnique({
       where: { id },
+      include: {
+        receivedFriendRequests: {
+          include: {
+            sender: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              }
+            }
+          }
+        },
+        sentFriendRequests: {
+          include: {
+            receiver: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              }
+            }
+          }
+        }
+      }
     });
 
     if (!user) {
@@ -46,12 +85,34 @@ export class UserService {
   async findByEmail(email: string) {
     return this.prisma.user.findUnique({
       where: { email },
+      include: {
+        receivedFriendRequests: {
+          include: {
+            sender: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              }
+            }
+          }
+        },
+        sentFriendRequests: {
+          include: {
+            receiver: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              }
+            }
+          }
+        }
+      }
     });
   }
 
   async update(id: string, data: UpdateUserInput) {
-    const user = await this.findOne(id);
-
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);
     }

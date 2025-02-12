@@ -66,7 +66,7 @@ export class FriendshipService {
     await this.cacheManager.del(this.getCacheKey(senderId));
     await this.cacheManager.del(this.getCacheKey(createFriendshipInput.receiverId));
 
-    await this.notificationsService.notifyFriendRequest(createFriendshipInput.receiverId, sender);
+    await this.notificationsService.notifyFriendRequest(friendship.id, createFriendshipInput.receiverId, sender);
 
 
     return friendship;

@@ -19,7 +19,53 @@ const authLink = setContext((_, { headers }) => {
 
 export const client = new ApolloClient({
   link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          me: {
+            merge(existing, incoming) {
+              return incoming;
+            },
+          },
+          users: {
+            merge(existing, incoming) {
+              return incoming;
+            },
+          },
+          searchUsers: {
+            merge(existing, incoming) {
+              return incoming;
+            },
+          },
+        },
+      },
+      User: {
+        fields: {
+          friends: {
+            merge(existing, incoming) {
+              return incoming;
+            },
+          },
+          receivedFriendRequests: {
+            merge(existing, incoming) {
+              return incoming;
+            },
+          },
+          sentFriendRequests: {
+            merge(existing, incoming) {
+              return incoming;
+            },
+          },
+        },
+      },
+    },
+  }),
+  defaultOptions: {
+    watchQuery: {
+      fetchPolicy: 'cache-and-network', // This ensures we get cached data first, then update from network
+    },
+  },
 });
 
 export function ApolloWrapper({ children }: { children: React.ReactNode }) {

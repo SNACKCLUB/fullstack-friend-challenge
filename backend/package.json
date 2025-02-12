@@ -24,7 +24,7 @@
     "docker:logs": "docker compose logs -f",
     "prisma:migrate": "prisma migrate deploy",
     "prisma:generate": "prisma generate",
-    "prisma:seed": "ts-node prisma/seed.ts"
+    "prisma:seed": "NODE_OPTIONS='--loader ts-node/esm' ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.11.3",

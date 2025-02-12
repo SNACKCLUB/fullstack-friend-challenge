@@ -11,7 +11,7 @@ import { NotificationsService } from './notifications.service';
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:3000',
+    origin: '*',
     credentials: true,
   },
   transports: ['websocket', 'polling'],
@@ -36,7 +36,7 @@ export class NotificationsGateway implements OnGatewayConnection, OnGatewayDisco
       const userId = payload.sub;
 
       this.notificationsService.addUserSocket(userId, client.id);
-      client.data.userId = userId; // Armazena o userId para uso no disconnect
+      client.data.userId = userId;
       client.emit('connected', { message: 'Connected to notifications' });
     } catch (error) {
       client.disconnect();

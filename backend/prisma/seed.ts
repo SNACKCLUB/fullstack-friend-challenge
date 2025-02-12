@@ -37,24 +37,6 @@ async function main() {
 
   console.log('Created users:', { user1, user2, user3 });
 
-  const friendship1 = await prisma.friendship.create({
-    data: {
-      senderId: user1.id,
-      receiverId: user2.id,
-      status: 'ACCEPTED',
-    },
-  });
-
-  const friendship2 = await prisma.friendship.create({
-    data: {
-      senderId: user3.id,
-      receiverId: user1.id,
-      status: 'PENDING',
-    },
-  });
-
-  console.log('Created friendships:', { friendship1, friendship2 });
-
   console.log('Seeding completed!');
 }
 

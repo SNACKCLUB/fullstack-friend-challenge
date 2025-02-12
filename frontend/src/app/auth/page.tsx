@@ -39,6 +39,10 @@ export default function AuthPage() {
         });
         if (loginData?.login.token) {
           localStorage.setItem('token', loginData.login.token);
+          window.dispatchEvent(new StorageEvent('storage', {
+            key: 'token',
+            newValue: loginData.login.token
+          }));
           router.push('/profile');
         }
       } else {
@@ -47,6 +51,10 @@ export default function AuthPage() {
         });
         if (signUpData?.signUp.token) {
           localStorage.setItem('token', signUpData.signUp.token);
+          window.dispatchEvent(new StorageEvent('storage', {
+            key: 'token',
+            newValue: signUpData.signUp.token
+          }));
           router.push('/profile');
         }
       }

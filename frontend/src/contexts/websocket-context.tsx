@@ -25,9 +25,11 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   const [refetchFunction, setRefetchFunction] = useState<(() => void) | null>(null);
   const { toast } = useToast();
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
+  const initializeSocket = (token: string) => {
+    if (socket) {
+      console.log('Cleaning up existing socket connection');
+      socket.disconnect();
+    }
 
     console.log('Attempting to connect with token:', token);
     const socketInstance = io('http://localhost:3001', {
@@ -72,7 +74,7 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Authorization': `Bearer ${token}`,
                       },
                       body: JSON.stringify({
                         query: RESPOND_TO_FRIEND_REQUEST.loc?.source.body,
@@ -115,7 +117,7 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
                       method: 'POST',
                       headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Authorization': `Bearer ${token}`,
                       },
                       body: JSON.stringify({
                         query: RESPOND_TO_FRIEND_REQUEST.loc?.source.body,
@@ -161,44 +163,76 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    socketInstance.on('friendRequestAccepted', (data) => {
-      console.log('Friend request accepted by:', data.accepter.name);
-      toast({
-        title: 'Friend Request Accepted',
-        description: `${data.accepter.name} accepted your friend request!`,
-        duration: 5000,
-      });
-      if (refetchFunction) {
-        refetchFunction();
-      }
-    });
-
-    socketInstance.on('friendRequestRejected', (data) => {
-      console.log('Friend request rejected by:', data.rejecter.name);
-      toast({
-        title: 'Friend Request Rejected',
-        description: `${data.rejecter.name} declined your friend request`,
-        duration: 5000,
-      });
-    });
-
-    // Error handling
-    socketInstance.on('connect_error', (error) => {
-      console.error('Socket.IO Connection Error:', error);
-      console.error('Connection details:', {
-        token: token ? 'Token exists' : 'No token',
-        url: 'http://localhost:3000',
-        error: error.message
-      });
-      setIsConnected(false);
-    });
-
     setSocket(socketInstance);
+    return socketInstance;
+  };
+
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'token') {
+        if (e.newValue) {
+          console.log('Token changed, reinitializing socket');
+          initializeSocket(e.newValue);
+        } else {
+          if (socket) {
+            console.log('Token removed, disconnecting socket');
+            socket.disconnect();
+            setSocket(null);
+            setIsConnected(false);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    const token = localStorage.getItem('token');
+    if (token) {
+      initializeSocket(token);
+    }
 
     return () => {
-      socketInstance.disconnect();
+      window.removeEventListener('storage', handleStorageChange);
+      if (socket) {
+        socket.disconnect();
+      }
     };
-  }, [toast]);
+  }, []);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('friendRequestAccepted', (data) => {
+        console.log('Friend request accepted by:', data.accepter.name);
+        toast({
+          title: 'Friend Request Accepted',
+          description: `${data.accepter.name} accepted your friend request!`,
+          duration: 5000,
+        });
+        if (refetchFunction) {
+          refetchFunction();
+        }
+      });
+
+      socket.on('friendRequestRejected', (data) => {
+        console.log('Friend request rejected by:', data.rejecter.name);
+        toast({
+          title: 'Friend Request Rejected',
+          description: `${data.rejecter.name} declined your friend request`,
+          duration: 5000,
+        });
+      });
+
+      socket.on('connect_error', (error) => {
+        console.error('Socket.IO Connection Error:', error);
+        console.error('Connection details:', {
+          token: localStorage.getItem('token') ? 'Token exists' : 'No token',
+          url: 'http://localhost:3001',
+          error: error.message
+        });
+        setIsConnected(false);
+      });
+    }
+  }, [socket, toast, refetchFunction]);
 
   return (
     <WebSocketContext.Provider value={{ socket, isConnected, setRefetchFunction }}>

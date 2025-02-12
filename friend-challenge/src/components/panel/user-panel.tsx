@@ -9,6 +9,8 @@ import { Tooltip } from "../ui/tooltip/tooltip";
 import { logOut as logOutRequest } from "@/app/actions/auth/logout";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { UsersList } from "../users/users-list";
 
 type PanelProps = {
   className?: string;
@@ -28,7 +30,7 @@ export const UserPanel = ({ className }: PanelProps) => {
     try {
       setLoading(true);
       await logOutRequest();
-      router.push("/login");
+      router.replace("/login");
     } catch (error) {
       toast({
         variant: "destructive",
@@ -69,7 +71,7 @@ export const UserPanel = ({ className }: PanelProps) => {
           className={cn(
             "flex flex-1 justify-end gap-2 ",
             "[&>*]:bg-gray-800 [&>*]:rounded-full [&>*]:p-2",
-            "hover:[&>button]:outline hover:[&>button]:outline-red-400"
+            "hover:[&>button]:text-red-400 [&>button]:transition-colors"
           )}
         >
           <Tooltip title="Notifications">
@@ -86,7 +88,42 @@ export const UserPanel = ({ className }: PanelProps) => {
         </div>
       </div>
       {/* card */}
-      <div></div>
+      <div>
+        <Tabs
+          defaultValue="friends"
+          className="w-full flex flex-col justify-center items-center"
+        >
+          <TabsList className="bg-gray-950 w-fit">
+            <TabsTrigger
+              value="networking"
+              className="data-[state=active]:bg-red-400 data-[state=active]:text-gray-200"
+            >
+              Networking
+            </TabsTrigger>
+            <TabsTrigger
+              value="friends"
+              className="data-[state=active]:bg-red-400 data-[state=active]:text-gray-200"
+            >
+              My friends
+            </TabsTrigger>
+            <TabsTrigger
+              value="friend-requests"
+              className="data-[state=active]:bg-red-400 data-[state=active]:text-gray-200"
+            >
+              My friend requests
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value="friends" className="w-full">
+            <UsersList mode="friend" />
+          </TabsContent>
+          <TabsContent value="networking" className="w-full">
+            <UsersList mode="networking" />
+          </TabsContent>
+          <TabsContent value="friend-requests" className="w-full">
+            <UsersList mode="friend-request" />
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };

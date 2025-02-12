@@ -43,7 +43,7 @@ export default function LoginForm() {
     try {
       setLoading(true);
       await signIn(data);
-      router.push("/dashboard");
+      router.replace("/dashboard");
     } catch ({ response }: any) {
       for (const field in response?.data?.errors) {
         setError(field as keyof LoginFormData, {

@@ -42,7 +42,7 @@ export default function RegisterForm() {
     try {
       setLoading(true);
       await registerUser(data);
-      router.push("/login");
+      router.replace("/login");
 
       toast({
         title: "Register completed successfully!",

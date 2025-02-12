@@ -4,7 +4,7 @@ import { deleteSession } from "@/lib/session";
 import { useRouter } from "next/navigation";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
-type User = {
+export type User = {
   name: string;
   email: string;
   image: string;
@@ -39,7 +39,7 @@ export function UserProvider({ children }: UserProviderData) {
         if (response?.statusText) console.error(response?.statusText);
 
         deleteSession();
-        router.push("/login");
+        router.replace("/login");
       }
     };
 

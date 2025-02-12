@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  padding: 0.5rem 1rem;
+  align-items: center;
+  height: 3rem;
+  background-color: #0e1d4a;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.option {
+  color: white;
+  cursor: pointer;
+}

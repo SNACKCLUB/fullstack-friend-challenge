@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  modifiedAt   DateTime @updatedAt
+
+  friendshipSend     Friendship[]   @relation("friendRequestSend")
+  friendshipReceived Friendship[]   @relation("friendRequestReceived")
+  Notification       Notification[]
+
+  @@map("users")
+}
+
+enum StatusNotification {
+  PENDING
+  READ
+}
+
+enum NotificationTypes {
+  INVITE
+}
+
+model Notification {
+  id           String             @id @default(uuid())
+  user         User               @relation(fields: [userId], references: [id])
+  userId       String
+  type         NotificationTypes  @default(INVITE)
+  status       StatusNotification @default(PENDING)
+  friendship   Friendship         @relation(fields: [friendshipId], references: [id])
+  friendshipId String
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  @@map("notifications")
+}
+
+enum FriendshipStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+model Friendship {
+  id String @id @default(uuid())
+
+  sender   User   @relation("friendRequestSend", fields: [senderId], references: [id])
+  senderId String
+
+  receiver   User   @relation("friendRequestReceived", fields: [receiverId], references: [id])
+  receiverId String
+
+  status       FriendshipStatus @default(PENDING)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  Notification Notification[]
+
+  @@unique([senderId, receiverId])
+  @@unique([receiverId, senderId])
+  @@map("friendships")
+}

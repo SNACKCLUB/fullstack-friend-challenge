@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  padding: 0.5rem 1rem;
+  align-items: center;
+  height: 2rem;
+  background-color: #e3f2fd;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.social {
+  display: flex;
+  gap: 1rem;
+}

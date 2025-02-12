@@ -5,6 +5,8 @@ export const mockAuthUser = {
   password: '$2a$10$somehashedpassword',
   createdAt: new Date(),
   updatedAt: new Date(),
+  sentFriendRequests: [],
+  receivedFriendRequests: []
 };
 
 export const mockLoginInput = {

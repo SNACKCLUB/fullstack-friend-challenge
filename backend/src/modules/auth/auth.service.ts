@@ -15,10 +15,10 @@ export class AuthService {
 
   async validateUser(email: string, password: string) {
     const user = await this.userService.findByEmail(email);
+    if (!user) return null;
 
-    console.log(await bcrypt.compare(password, user.password));
-
-    if (user && (await bcrypt.compare(password, user.password))) {
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (isPasswordValid) {
       return user;
     }
     return null;
@@ -46,8 +46,6 @@ export class AuthService {
     if (existingUser) {
       throw new UnauthorizedException('Email already exists');
     }
-
-    console.log(signUpInput.password);
 
     const hashedPassword = await bcrypt.hash(signUpInput.password, 10);
     const user = await this.userService.create({

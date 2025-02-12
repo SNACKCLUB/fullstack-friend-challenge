@@ -4,6 +4,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { mockCreateFriendshipInput, mockFriendship } from './__mocks__/friendship.mock';
 import { FriendshipService } from './friendship.service';
 import { FriendshipStatus } from './models/friendship.model';
+import { NotificationsService } from '../notifications/notifications.service';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+
+jest.mock('@nestjs/cache-manager', () => ({
+  ...jest.requireActual('@nestjs/cache-manager'),
+  CACHE_MANAGER: 'CACHE_MANAGER',
+}));
 
 describe('FriendshipService', () => {
   let service: FriendshipService;
@@ -22,6 +29,21 @@ describe('FriendshipService', () => {
     },
   };
 
+  const notificationsServiceMock = {
+    create: jest.fn(),
+    notifyFriendRequestAccepted: jest.fn(),
+    notifyFriendRequestRejected: jest.fn(),
+    notifyFriendRequest: jest.fn(),
+  };
+
+  
+  const mockCacheManager = {
+    get: jest.fn(),
+    set: jest.fn(),
+    del: jest.fn(),
+  };
+
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -29,6 +51,14 @@ describe('FriendshipService', () => {
         {
           provide: PrismaService,
           useValue: prismaServiceMock,
+        },
+        {
+          provide: NotificationsService,
+          useValue: notificationsServiceMock,
+        },
+        {
+          provide: CACHE_MANAGER,
+          useValue: mockCacheManager,
         },
       ],
     }).compile();

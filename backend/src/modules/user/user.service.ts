@@ -113,6 +113,14 @@ export class UserService {
   }
 
   async update(id: string, data: UpdateUserInput) {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);
     }

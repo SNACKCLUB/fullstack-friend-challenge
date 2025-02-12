@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { mockCreateUserInput, mockUpdateUserInput, mockUser } from './__mocks__/user.mock';
 import { UserResolver } from './user.resolver';
 import { UserService } from './user.service';
+import { FriendshipService } from '../friendship/friendship.service';
 
 describe('UserResolver', () => {
   let resolver: UserResolver;
@@ -15,6 +16,15 @@ describe('UserResolver', () => {
     remove: jest.fn(),
   };
 
+  const friendshipServiceMock = {
+    create: jest.fn(),
+    findUserFriendships: jest.fn(),
+    findUserFriends: jest.fn(),
+    findPendingRequests: jest.fn(),
+    update: jest.fn(),
+    remove: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -22,6 +32,10 @@ describe('UserResolver', () => {
         {
           provide: UserService,
           useValue: userServiceMock,
+        },
+        {
+          provide: FriendshipService,
+          useValue: friendshipServiceMock,
         },
       ],
     }).compile();

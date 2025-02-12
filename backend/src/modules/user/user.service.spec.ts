@@ -52,7 +52,6 @@ describe('UserService', () => {
       expect(prisma.user.create).toHaveBeenCalledWith({
         data: {
           ...mockCreateUserInput,
-          password: 'hashedPassword',
         },
       });
     });
@@ -86,6 +85,30 @@ describe('UserService', () => {
       expect(result).toEqual(mockUser);
       expect(prisma.user.findUnique).toHaveBeenCalledWith({
         where: { id: '1' },
+        include: {
+          receivedFriendRequests: {
+            include: {
+              sender: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                }
+              }
+            }
+          },
+          sentFriendRequests: {
+            include: {
+              receiver: {
+                select: {
+                  id: true,
+                  name: true,
+                  email: true,
+                }
+              }
+            }
+          }
+        }
       });
     });
 
@@ -115,10 +138,10 @@ describe('UserService', () => {
 
     it('should throw NotFoundException if user not found', async () => {
       prismaServiceMock.user.findUnique.mockResolvedValue(null);
-
-      await expect(service.update('1', mockUpdateUserInput)).rejects.toThrow(
-        NotFoundException,
-      );
+      
+      const updatePromise = service.update('1', mockUpdateUserInput);
+      await expect(updatePromise).rejects.toThrow(NotFoundException);
+      expect(prisma.user.update).not.toHaveBeenCalled();
     });
   });
 

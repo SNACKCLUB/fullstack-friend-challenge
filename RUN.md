@@ -1,16 +1,19 @@
-# To run this project, you need to have Docker and Docker Compose installed on your machine. Then, run the following command:
+## First Step
+copy .env.example to .env on each project folder
+
+## To run this project, you need to have Docker and Docker Compose installed on your machine. Then, run the following command:
 
 ```bash
 cd backend && pnpm docker:build && pnpm docker:up
 ```
 
-# To run the frontend, you need to have Node.js and pnpm installed on your machine. Then, run the following command:
+## To run the frontend, you need to have Node.js and pnpm installed on your machine. Then, run the following command:
 
 ```bash
 cd frontend && pnpm install && pnpm run dev
 ```
 
-# Credentials:
+## Credentials:
 ```
 [
         {
@@ -28,7 +31,7 @@ cd frontend && pnpm install && pnpm run dev
 ]
 ```
 
-# About the project:
+## About the project:
 - You can sign up using the `signUp` mutation.
 - You can login using the `login` mutation.
 - You can create a friendship using the `createFriendship` mutation.

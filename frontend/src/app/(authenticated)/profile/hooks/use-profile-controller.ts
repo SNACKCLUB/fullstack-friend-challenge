@@ -55,7 +55,6 @@ export function useProfileController() {
   
   const { socket } = useWebSocket();
 
-  // Set up WebSocket event handlers for friend requests
   useEffect(() => {
     if (!socket) return;
 
@@ -86,12 +85,10 @@ export function useProfileController() {
       });
     };
 
-    // Subscribe to WebSocket events
     socket.on('friendRequest', handleFriendRequest);
     socket.on('friendRequestAccepted', handleFriendRequestAccepted);
     socket.on('friendRequestRejected', handleFriendRequestRejected);
 
-    // Cleanup subscriptions
     return () => {
       socket.off('friendRequest', handleFriendRequest);
       socket.off('friendRequestAccepted', handleFriendRequestAccepted);
@@ -125,7 +122,6 @@ export function useProfileController() {
       });
     },
     update: (cache) => {
-      // Invalidate and refetch relevant queries
       cache.evict({ fieldName: 'me' });
       cache.gc();
       refetchUser();
@@ -148,7 +144,6 @@ export function useProfileController() {
       });
     },
     update: (cache, { data }) => {
-      // Always invalidate the cache for friend-related operations
       cache.evict({ fieldName: 'me' });
       cache.gc();
       refetchUser();
@@ -224,7 +219,6 @@ export function useProfileController() {
     setSearchQuery,
     searchResults: searchData?.searchUsers || [],
     searchLoading,
-
     handleSendFriendRequest,
     handleRespondToRequest,
     handleLogout,

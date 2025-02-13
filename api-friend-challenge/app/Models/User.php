@@ -76,7 +76,12 @@ class User extends Authenticatable
 
     public function requestStatus(): string
     {
-        $friendRequest = FriendRequest::where('user_id', $this->id)->orWhere('requested_user_id', $this->id)->get()->last();
+        $friendRequest = FriendRequest::where(function ($q) {
+            $q->where('user_id', $this->id)->where('requested_user_id', Auth::id());
+        })->orWhere(function ($q) {
+            $q->where('user_id', Auth::id())->where('requested_user_id', $this->id);
+        })->get()->last();
+
         return $friendRequest ? $friendRequest->status : "";
     }
 

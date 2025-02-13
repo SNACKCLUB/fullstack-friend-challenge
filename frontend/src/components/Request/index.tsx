@@ -39,6 +39,7 @@ export const Request = () => {
               <Typography.Text>{item?.friend?.email}</Typography.Text>
             </div>
             <IoPersonAdd
+              className="icon"
               onClick={() =>
                 updateFriendshipStatus({
                   friendId: item.id,
@@ -47,6 +48,7 @@ export const Request = () => {
               }
             />
             <IoPersonRemove
+              className="icon"
               onClick={() =>
                 updateFriendshipStatus({
                   friendId: item.id,

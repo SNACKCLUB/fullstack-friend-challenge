@@ -1,12 +1,16 @@
 import { useAuthStore } from "@/store/auth/authStore";
 import { AiOutlineLogout } from "react-icons/ai";
-import styles from "./header.module.scss";
-import { Typography } from "antd";
+import { Badge, Typography } from "antd";
 import { useRouter } from "next/router";
+import { IoMdNotifications } from "react-icons/io";
+
+import styles from "./header.module.scss";
+import { useNotificationStore } from "@/store/notifications/notificationStore";
 
 export const Header = () => {
   const router = useRouter();
   const { user, logout } = useAuthStore();
+  const { count, clearNotifications } = useNotificationStore();
 
   const options = [
     {
@@ -34,12 +38,21 @@ export const Header = () => {
         ))}
       </div>
       <div className={styles.content}>
+        <Badge
+          count={count}
+          size="small"
+          onClick={() => {
+            router.push("/requests"), clearNotifications();
+          }}
+        >
+          <IoMdNotifications color="white" className="icon" />
+        </Badge>
         <Typography.Text style={{ color: "white" }}>
           Seja bem vindo, {user?.name}
         </Typography.Text>
         <AiOutlineLogout
           color="white"
-          style={{ cursor: "pointer " }}
+          className="icon"
           onClick={() => logout()}
         />
       </div>

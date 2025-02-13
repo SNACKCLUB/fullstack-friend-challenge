@@ -79,16 +79,4 @@ export const friendshipController = {
       next(error);
     }
   },
-
-  async removeFriend(request: Request, response: Response, next: NextFunction) {
-    try {
-      const { userId, friendId } = request.body;
-
-      await FriendshipService.removeFriend({ userId, friendId });
-
-      return response.status(204).send();
-    } catch (error) {
-      next(error);
-    }
-  },
 };

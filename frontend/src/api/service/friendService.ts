@@ -20,15 +20,9 @@ const getFriends = async ({
   }
 };
 
-const removeFriend = async ({
-  userId,
-  friendId,
-}: FriendRelationTypes): Promise<void> => {
+const removeFriend = async (friendshipId: string): Promise<void> => {
   try {
-    await axiosInstance.post(`friendships/remove`, {
-      userId,
-      friendId,
-    });
+    await axiosInstance.delete(`friendships/${friendshipId}`);
   } catch (error: any) {
     throw new Error(error);
   }

@@ -3,8 +3,7 @@ import { prisma } from "../prisma/index";
 
 export const PrismaUserRepository = () => {
   const create = async (data: Prisma.UserCreateInput) => {
-    const user = await prisma.user.create({ data });
-    return user;
+    return await prisma.user.create({ data });
   };
 
   const update = async ({
@@ -14,13 +13,11 @@ export const PrismaUserRepository = () => {
     id: Prisma.UserWhereUniqueInput["id"];
     data: Prisma.UserUpdateInput;
   }) => {
-    const user = await prisma.user.update({ where: { id }, data });
-    return user;
+    return await prisma.user.update({ where: { id }, data });
   };
 
   const get = async ({ id }: Prisma.UserWhereUniqueInput) => {
-    const user = await prisma.user.findUnique({ where: { id } });
-    return user;
+    return await prisma.user.findUnique({ where: { id } });
   };
 
   const getUsersByFilter = async ({
@@ -48,13 +45,11 @@ export const PrismaUserRepository = () => {
   };
 
   const getByEmail = async (email: string) => {
-    const user = await prisma.user.findUnique({ where: { email } });
-    return user;
+    return await prisma.user.findUnique({ where: { email } });
   };
 
   const deleteUser = async ({ id }: Prisma.UserWhereUniqueInput) => {
-    const user = await prisma.user.delete({ where: { id } });
-    return user;
+    return await prisma.user.delete({ where: { id } });
   };
 
   return {

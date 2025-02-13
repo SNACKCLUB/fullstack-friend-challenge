@@ -17,9 +17,9 @@ export const FriendList = () => {
     }
   }, [user]);
 
-  const handleRemoveFriend = (friendId: string) => {
+  const handleRemoveFriendship = (friendshipId: string) => {
     if (user) {
-      removeFriendship({ userId: user.id, friendId });
+      removeFriendship(friendshipId);
     }
   };
 
@@ -45,7 +45,8 @@ export const FriendList = () => {
               <Typography.Text>{item.friend.email}</Typography.Text>
             </div>
             <MdOutlineDeleteSweep
-              onClick={() => handleRemoveFriend(item.friend.id)}
+              className="icon"
+              onClick={() => handleRemoveFriendship(item.id)}
             />
           </div>
         </List.Item>

@@ -40,7 +40,10 @@ export const AddFriend = () => {
                     <Typography.Text strong>Email:</Typography.Text>
                     <Typography.Text>{item.email}</Typography.Text>
                   </div>
-                  <IoPersonAdd onClick={() => addFriendship(item.id)} />
+                  <IoPersonAdd
+                    onClick={() => addFriendship(item.id)}
+                    className="icon"
+                  />
                 </div>
               </List.Item>
             )}

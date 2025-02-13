@@ -21,7 +21,9 @@ export const PrismaFriendshipRepository = () => {
     return await prisma.friendship.findUnique({ where: { id } });
   };
 
-  const deleteFriendship = async ({ id }: Prisma.UserWhereUniqueInput) => {
+  const deleteFriendship = async ({
+    id,
+  }: Prisma.FriendshipWhereUniqueInput) => {
     return await prisma.friendship.delete({ where: { id } });
   };
 

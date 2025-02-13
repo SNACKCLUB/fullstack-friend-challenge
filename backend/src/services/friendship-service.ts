@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { PrismaFriendshipRepository } from "../repositories/prisma-friend-request-repository";
+import { sendNotification } from "..";
 
 const friendship = PrismaFriendshipRepository();
 
@@ -29,6 +30,8 @@ export const FriendshipService = {
     data: Prisma.FriendshipUpdateInput;
   }) {
     const updatedFriendship = await friendship.update({ id, data });
+    sendNotification(updatedFriendship.senderId, updatedFriendship);
+
     if (updatedFriendship.senderId)
       await friendship.invalidateFriendsCache(updatedFriendship.senderId);
     if (updatedFriendship.receiverId)
@@ -37,15 +40,11 @@ export const FriendshipService = {
   },
 
   async delete({ id }: Prisma.FriendshipWhereUniqueInput) {
-    const friendshipData = await friendship.get({ id });
-    if (!friendshipData) {
-      throw new Error("Friendship not found");
-    }
-    await friendship.delete({ id });
-    if (friendshipData.senderId)
-      await friendship.invalidateFriendsCache(friendshipData.senderId);
-    if (friendshipData.receiverId)
-      await friendship.invalidateFriendsCache(friendshipData.receiverId);
+    const friendshipDeleted = await friendship.delete({ id });
+    if (friendshipDeleted.senderId)
+      await friendship.invalidateFriendsCache(friendshipDeleted.senderId);
+    if (friendshipDeleted.receiverId)
+      await friendship.invalidateFriendsCache(friendshipDeleted.receiverId);
   },
 
   async getFriends({
@@ -56,28 +55,5 @@ export const FriendshipService = {
     status: Prisma.EnumFriendshipStatusFilter<"Friendship">;
   }) {
     return await friendship.getFriends({ id, status });
-  },
-
-  async removeFriend({
-    userId,
-    friendId,
-  }: {
-    userId: string;
-    friendId: string;
-  }) {
-    const friendshipData = await friendship.findFriendshipByUserIds({
-      userId,
-      friendId,
-    });
-
-    if (!friendshipData) {
-      throw new Error("Friendship not found");
-    }
-
-    await friendship.delete({ id: friendshipData.id });
-    if (friendshipData.senderId)
-      await friendship.invalidateFriendsCache(friendshipData.senderId);
-    if (friendshipData.receiverId)
-      await friendship.invalidateFriendsCache(friendshipData.receiverId);
   },
 };

@@ -3,12 +3,19 @@ import { prisma } from "../prisma/index";
 
 export const PrismaNotificationRepository = () => {
   const create = async (data: Prisma.NotificationCreateInput) => {
-    await prisma.notification.create({ data });
+    return await prisma.notification.create({ data });
   };
 
   const update = async ({ id }: Prisma.NotificationWhereUniqueInput) => {
     await prisma.notification.update({
       where: { id },
+      data: { status: "READ" },
+    });
+  };
+
+  const clean = async ({ userId }: Prisma.NotificationWhereInput) => {
+    await prisma.notification.updateMany({
+      where: { userId, status: "PENDING" },
       data: { status: "READ" },
     });
   };
@@ -21,14 +28,10 @@ export const PrismaNotificationRepository = () => {
     return notification;
   };
 
-  const getByUserAndStatus = async ({
-    userId,
-    status,
-  }: Prisma.NotificationWhereInput) => {
-    const notifications = await prisma.notification.findMany({
-      where: { userId, status },
+  const getCountByUser = async ({ userId }: Prisma.NotificationWhereInput) => {
+    return await prisma.notification.count({
+      where: { userId, status: "PENDING" },
     });
-    return notifications;
   };
 
   const deleteNotification = async ({
@@ -40,8 +43,9 @@ export const PrismaNotificationRepository = () => {
   return {
     create,
     get,
-    getByUserAndStatus,
+    getCountByUser,
     update,
     delete: deleteNotification,
+    clean,
   };
 };

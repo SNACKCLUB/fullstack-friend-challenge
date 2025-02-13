@@ -28,22 +28,19 @@ export const notificationController = {
     }
   },
 
-  async getByUserAndStatus(
+  async getCountByUser(
     request: Request,
     response: Response,
     next: NextFunction
   ) {
     try {
-      const { userId, status } = request.params;
+      const { userId } = request.params;
 
       await UserService.get({ id: userId });
 
-      const notifications = await NotificationService.getByUserAndStatus({
-        userId,
-        status: status as Prisma.EnumStatusNotificationFilter<"Notification">,
-      });
+      const count = await NotificationService.getCountByUser({ userId });
 
-      return response.status(200).send(notifications);
+      return response.status(200).json({ count });
     } catch (error) {
       next(error);
     }
@@ -58,6 +55,20 @@ export const notificationController = {
       await NotificationService.update({ id });
 
       return response.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async clean(request: Request, response: Response, next: NextFunction) {
+    try {
+      const { userId } = request.params;
+
+      await UserService.get({ id: userId });
+
+      await NotificationService.clean({ userId });
+
+      return response.status(204).send();
     } catch (error) {
       next(error);
     }

@@ -31,13 +31,6 @@ friendshipRouter.delete(
   }
 );
 
-friendshipRouter.post(
-  "/remove",
-  async (request: Request, response: Response, next: NextFunction) => {
-    return friendshipController.removeFriend(request, response, next);
-  }
-);
-
 friendshipRouter.get(
   "/:userId/friends",
   async (request: Request, response: Response, next: NextFunction) => {

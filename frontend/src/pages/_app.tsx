@@ -10,6 +10,7 @@ import { Header } from "@/components/Header";
 
 import "@/styles/global.scss";
 import { Footer } from "@/components/Footer";
+import NotificationListener from "@/components/Notification";
 
 const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter();
@@ -33,6 +34,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <ConfigProvider theme={theme}>
       <ToastContainer />
+      <NotificationListener />
       {router.pathname !== "/" && <Header />}
       <div className="containerApp">
         <Component {...pageProps} />

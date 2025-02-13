@@ -11,9 +11,16 @@ notificationRouter.get(
 );
 
 notificationRouter.get(
-  "/all/:userId/:status",
+  "/all/:userId",
   async (request: Request, response: Response, next: NextFunction) => {
-    return notificationController.getByUserAndStatus(request, response, next);
+    return notificationController.getCountByUser(request, response, next);
+  }
+);
+
+notificationRouter.put(
+  "/clean/:userId",
+  async (request: Request, response: Response, next: NextFunction) => {
+    return notificationController.clean(request, response, next);
   }
 );
 

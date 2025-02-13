@@ -1,11 +1,14 @@
 import { Prisma } from "@prisma/client";
 import { PrismaNotificationRepository } from "../repositories/prisma-notification-repository";
+import { sendNotification } from "../index";
 
 const notificationRepository = PrismaNotificationRepository();
 
 export const NotificationService = {
   async create(data: Prisma.NotificationCreateInput) {
-    await notificationRepository.create(data);
+    const notification = await notificationRepository.create(data);
+
+    sendNotification(notification.userId, notification);
   },
 
   async get({ id }: Prisma.NotificationWhereUniqueInput) {
@@ -22,17 +25,14 @@ export const NotificationService = {
     await notificationRepository.update({ id });
   },
 
-  async getByUserAndStatus({ userId, status }: Prisma.NotificationWhereInput) {
-    const notifications = await notificationRepository.getByUserAndStatus({
+  async clean({ userId }: Prisma.NotificationWhereInput) {
+    await notificationRepository.clean({ userId });
+  },
+
+  async getCountByUser({ userId }: Prisma.NotificationWhereInput) {
+    return await notificationRepository.getCountByUser({
       userId,
-      status,
     });
-
-    if (!notifications) {
-      throw new Error("Notifications not found");
-    }
-
-    return notifications;
   },
 
   async delete({ id }: Prisma.NotificationWhereUniqueInput) {

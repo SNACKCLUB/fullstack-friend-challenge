@@ -1,4 +1,4 @@
-import { UserTypes } from "@/common/types/UserTypes";
+import { UserCreateTypes, UserTypes } from "@/store/users/types";
 import axiosInstance from "../axios";
 
 const getUsersByFilter = async ({
@@ -20,4 +20,21 @@ const getUsersByFilter = async ({
   }
 };
 
-export { getUsersByFilter };
+const createUser = async ({
+  email,
+  password,
+  name,
+}: UserCreateTypes): Promise<void> => {
+  try {
+    const response = await axiosInstance.post(`users/`, {
+      email,
+      password,
+      name,
+    });
+
+    return response.data;
+  } catch (error: any) {
+    throw new Error(error);
+  }
+};
+export { getUsersByFilter, createUser };

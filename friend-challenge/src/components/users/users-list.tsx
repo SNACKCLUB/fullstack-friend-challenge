@@ -27,7 +27,7 @@ export const UsersList = ({ mode }: UsersListProps) => {
 
   return (
     <div className="flex flex-col gap-4 w-full mt-1">
-      {loading && <span className="text-center">Loading...</span>}
+      {loading && <small className="text-center">Loading...</small>}
 
       {!loading &&
         users.map((user) => {
@@ -37,6 +37,10 @@ export const UsersList = ({ mode }: UsersListProps) => {
             </UserItem>
           );
         })}
+
+      {!loading && users.length === 0 && (
+        <small className="text-center">Empty list</small>
+      )}
     </div>
   );
 };

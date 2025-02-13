@@ -46,7 +46,7 @@ export const UserPanel = ({ className }: PanelProps) => {
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 min-w-[700px]",
+        "flex flex-col gap-4 w-[90%] max-w-[700px]",
         "[&>*]:flex [&>*]:items-center [&>*]:gap-4 [&>*]:border [&>*]:border-gray-800 [&>*]:p-4 [&>*]:rounded-lg",
         className
       )}
@@ -56,7 +56,7 @@ export const UserPanel = ({ className }: PanelProps) => {
         {user?.image && (
           <figure>
             <Image
-              className="rounded-full outline outline-red-400 size-[100px] object-cover"
+              className="rounded-full outline outline-red-400 size-[100px] min-w-[100px] object-cover"
               src={user.image}
               alt="Picture of the author"
               width={100}

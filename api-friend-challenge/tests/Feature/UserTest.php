@@ -65,3 +65,36 @@ it("should update a user", function () {
 
     $response->assertOk()->assertJson(["data" => ["name" => $name]]);
 });
+
+it("should get users for networking", function () {
+    $user = User::factory()->create();
+    $users = User::factory(10)->create();
+
+    $response = $this->actingAs($user)->getJson(route("user.index", [
+        "selection" => "networking"
+    ]));
+
+    $response->assertOk()->assertJsonCount(count($users), 'data');
+});
+
+it("should get users for user friends", function () {
+    $user = User::factory()->create();
+    $users = User::factory(10)->create();
+
+    $response = $this->actingAs($user)->getJson(route("user.index", [
+        "selection" => "friend"
+    ]));
+
+    $response->assertOk()->assertJsonCount(0, 'data');
+});
+
+it("should get users for friend_request", function () {
+    $user = User::factory()->create();
+    $users = User::factory(10)->create();
+
+    $response = $this->actingAs($user)->getJson(route("user.index", [
+        "selection" => "friend-request"
+    ]));
+
+    $response->assertOk()->assertJsonCount(0, 'data');
+});

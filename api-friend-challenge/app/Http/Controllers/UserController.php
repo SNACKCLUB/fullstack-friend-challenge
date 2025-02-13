@@ -18,7 +18,7 @@ class UserController
 
     public function index(): JsonResponse
     {
-        return $this->response(Response::HTTP_OK, UserResource::collection(User::get()));
+        return $this->response(Response::HTTP_OK, UserResource::collection(User::filter()->get()));
     }
 
     public function show(User $user)

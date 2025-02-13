@@ -4,14 +4,13 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { useContext, useState } from "react";
 import { UserContext } from "../contexts/user";
-import { Bell, Ellipsis, LogOut } from "lucide-react";
+import { Ellipsis, LogOut } from "lucide-react";
 import { Tooltip } from "../ui/tooltip";
 import { logOut as logOutRequest } from "@/app/actions/auth/logout";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { UsersList } from "../users/users-list";
-import { Popover } from "../ui/popover";
 import { UserNotification } from "../users/user-notification";
 
 type PanelProps = {

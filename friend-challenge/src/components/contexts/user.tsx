@@ -8,6 +8,7 @@ export type User = {
   name: string;
   email: string;
   image: string;
+  request_status?: string;
 };
 
 type UserContextData = {

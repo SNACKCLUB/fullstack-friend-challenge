@@ -11,11 +11,21 @@ First copy the file <b>.env.example</b> and rename it to <b>.env</b>
 After that, run the development server:
 
 ```bash
+# for developer
+
 #1
 yarn install
 
 #2
 yarn run dev
+
+# for production preview
+
+#1
+yarn build
+
+#2
+yarn start
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.

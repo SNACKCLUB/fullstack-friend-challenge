@@ -4,7 +4,9 @@ import { List, Typography } from "antd";
 import { useEffect } from "react";
 
 import styles from "../Friends/components/FriendList/friendList.module.scss";
-import { IoPersonAdd, IoPersonRemove } from "react-icons/io5";
+
+import { IoPersonAdd } from "react-icons/io5";
+import { IoMdRemoveCircle } from "react-icons/io";
 
 export const Request = () => {
   const { friendships, fetchFriendships, updateFriendshipStatus } =
@@ -38,24 +40,28 @@ export const Request = () => {
               <Typography.Text strong>Email:</Typography.Text>
               <Typography.Text>{item?.friend?.email}</Typography.Text>
             </div>
-            <IoPersonAdd
-              className="icon"
-              onClick={() =>
-                updateFriendshipStatus({
-                  friendId: item.id,
-                  status: "ACCEPTED",
-                })
-              }
-            />
-            <IoPersonRemove
-              className="icon"
-              onClick={() =>
-                updateFriendshipStatus({
-                  friendId: item.id,
-                  status: "DECLINED",
-                })
-              }
-            />
+            <div>
+              <IoPersonAdd
+                className="icon"
+                style={{ color: "green" }}
+                onClick={() =>
+                  updateFriendshipStatus({
+                    friendId: item.id,
+                    status: "ACCEPTED",
+                  })
+                }
+              />
+              <IoMdRemoveCircle
+                className="icon"
+                style={{ color: "red" }}
+                onClick={() =>
+                  updateFriendshipStatus({
+                    friendId: item.id,
+                    status: "DECLINED",
+                  })
+                }
+              />
+            </div>
           </div>
         </List.Item>
       )}

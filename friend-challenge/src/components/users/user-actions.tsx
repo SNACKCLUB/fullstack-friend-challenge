@@ -2,6 +2,17 @@ import { Check, Handshake, Trash, UserIcon, X } from "lucide-react";
 import { useContext } from "react";
 import { User, UserContext } from "../contexts/user";
 import { Tooltip } from "../ui/tooltip";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
 
 type UserActionsProps = {
   user: User;
@@ -9,15 +20,40 @@ type UserActionsProps = {
 };
 
 export const UserActions = ({ user, mode }: UserActionsProps) => {
-  const { sendFriendRequest } = useContext(UserContext);
+  const { sendFriendRequest, removeFriendFromList } = useContext(UserContext);
 
   return (
     <>
       {mode === "friend" && (
         <Tooltip title="Remove friend">
-          <button disabled={false}>
-            <Trash size={18} />
-          </button>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <button disabled={false}>
+                <Trash size={18} />
+              </button>
+            </AlertDialogTrigger>
+            <AlertDialogContent className="bg-gray-800 border-none">
+              <AlertDialogHeader>
+                <AlertDialogTitle className="text-gray-200">
+                  Are you absolutely sure?
+                </AlertDialogTitle>
+                <AlertDialogDescription className="text-gray-300">
+                  Do you really want to remove this user from your friends list?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel className="bg-gray-900 border-none">
+                  Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                  className="bg-red-400"
+                  onClick={() => removeFriendFromList(user)}
+                >
+                  Continue
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </Tooltip>
       )}
 

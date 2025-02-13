@@ -1,8 +1,8 @@
 "use client";
 
 import { getUsers } from "@/app/actions/users/getUsers";
-import { useCallback, useEffect, useState } from "react";
-import { User } from "../contexts/user";
+import { useCallback, useContext, useEffect, useState } from "react";
+import { User, UserContext } from "../contexts/user";
 import { UserItem } from "./user-item";
 import { UserActions } from "./user-actions";
 
@@ -13,17 +13,23 @@ type UsersListProps = {
 export const UsersList = ({ mode }: UsersListProps) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const { reloadList, setReloadList } = useContext(UserContext);
 
   const loadUsers = useCallback(async () => {
     setLoading(true);
     const users = await getUsers(`?selection=${mode}`);
     setUsers(users);
     setLoading(false);
-  }, [mode]);
+    setReloadList(false);
+  }, [mode, setReloadList]);
 
   useEffect(() => {
     loadUsers();
   }, [loadUsers]);
+
+  useEffect(() => {
+    if (reloadList) loadUsers();
+  }, [reloadList, loadUsers]);
 
   return (
     <div className="flex flex-col gap-4 w-full mt-1">

@@ -1,4 +1,5 @@
 import { getMe } from "@/app/actions/auth/me";
+import { removeFriend } from "@/app/actions/friend/removeFriend";
 import { createFriendRequest } from "@/app/actions/requests/request";
 import { useToast } from "@/hooks/use-toast";
 import { deleteSession } from "@/lib/session";
@@ -18,6 +19,7 @@ type UserContextData = {
   reloadList: boolean;
   setReloadList: (value: boolean) => void;
   sendFriendRequest: (user: User) => Promise<void>;
+  removeFriendFromList: (user: User) => Promise<void>;
 };
 
 type UserProviderData = {
@@ -81,9 +83,33 @@ export function UserProvider({ children }: UserProviderData) {
     }
   };
 
+  const removeFriendFromList = async (user: User) => {
+    try {
+      await removeFriend(user.id);
+      setReloadList(true);
+
+      toast({
+        title: `Friend removed successfully.`,
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: `Error to remove a friend!`,
+      });
+    }
+  };
+
   return (
     <UserContext.Provider
-      value={{ user, reloadList, sendFriendRequest, setReloadList }}
+      value={{
+        user,
+        reloadList,
+        sendFriendRequest,
+        removeFriendFromList,
+        setReloadList,
+      }}
     >
       {children}
     </UserContext.Provider>

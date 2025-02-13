@@ -1,5 +1,6 @@
 import { Check, Handshake, Trash, UserIcon, X } from "lucide-react";
-import { User } from "../contexts/user";
+import { useContext } from "react";
+import { User, UserContext } from "../contexts/user";
 import { Tooltip } from "../ui/tooltip";
 
 type UserActionsProps = {
@@ -8,6 +9,8 @@ type UserActionsProps = {
 };
 
 export const UserActions = ({ user, mode }: UserActionsProps) => {
+  const { sendFriendRequest } = useContext(UserContext);
+
   return (
     <>
       {mode === "friend" && (
@@ -21,7 +24,7 @@ export const UserActions = ({ user, mode }: UserActionsProps) => {
       {mode === "networking" &&
         (!user?.request_status || user?.request_status === "declined") && (
           <Tooltip title="Request friend">
-            <button disabled={false}>
+            <button disabled={false} onClick={() => sendFriendRequest(user)}>
               <Handshake size={18} />
             </button>
           </Tooltip>

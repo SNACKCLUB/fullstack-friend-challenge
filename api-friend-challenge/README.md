@@ -43,13 +43,13 @@ We can run migrations and seeders
 
 ```bash
 # run these commands inside a container
-php artisan migration
+php artisan migrate
 
 # or
-php artisan migration --seed
+php artisan migrate --seed
 
 # or reset all migration and seeders
-php artisan migration:refresh --seed
+php artisan migrate:refresh --seed
 ```
 
 If everything went well so far, you can log in normally with a test user

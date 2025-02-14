@@ -17,10 +17,20 @@ import {
 type UserActionsProps = {
   user: User;
   mode: string;
+  friend_request_id?: string;
 };
 
-export const UserActions = ({ user, mode }: UserActionsProps) => {
-  const { sendFriendRequest, removeFriendFromList } = useContext(UserContext);
+export const UserActions = ({
+  user,
+  mode,
+  friend_request_id = "",
+}: UserActionsProps) => {
+  const {
+    sendFriendRequest,
+    removeFriendFromList,
+    acceptFriendRequest,
+    declineFriendRequest,
+  } = useContext(UserContext);
 
   return (
     <>
@@ -88,7 +98,10 @@ export const UserActions = ({ user, mode }: UserActionsProps) => {
 
       {mode === "notification" && (
         <Tooltip title="Accept request">
-          <button disabled={false}>
+          <button
+            disabled={false}
+            onClick={() => acceptFriendRequest(friend_request_id)}
+          >
             <Check size={18} />
           </button>
         </Tooltip>
@@ -96,7 +109,10 @@ export const UserActions = ({ user, mode }: UserActionsProps) => {
 
       {mode === "notification" && (
         <Tooltip title="Declined request">
-          <button disabled={false}>
+          <button
+            disabled={false}
+            onClick={() => declineFriendRequest(friend_request_id)}
+          >
             <X size={18} />
           </button>
         </Tooltip>

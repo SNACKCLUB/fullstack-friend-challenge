@@ -1,6 +1,7 @@
 import { getMe } from "@/app/actions/auth/me";
 import { removeFriend } from "@/app/actions/friend/removeFriend";
 import { createFriendRequest } from "@/app/actions/requests/request";
+import { updateRequest } from "@/app/actions/requests/updateRequest";
 import { useToast } from "@/hooks/use-toast";
 import { deleteSession } from "@/lib/session";
 import { useRouter } from "next/navigation";
@@ -20,6 +21,8 @@ type UserContextData = {
   setReloadList: (value: boolean) => void;
   sendFriendRequest: (user: User) => Promise<void>;
   removeFriendFromList: (user: User) => Promise<void>;
+  acceptFriendRequest: (friend_request_id: string) => Promise<void>;
+  declineFriendRequest: (friend_request_id: string) => Promise<void>;
 };
 
 type UserProviderData = {
@@ -101,6 +104,42 @@ export function UserProvider({ children }: UserProviderData) {
     }
   };
 
+  const acceptFriendRequest = async (friend_request_id: string) => {
+    try {
+      await updateRequest({ id: friend_request_id, status: "accepted" });
+      setReloadList(true);
+
+      toast({
+        title: `Friend request was accepted.`,
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: `Error when accept a friend request!`,
+      });
+    }
+  };
+
+  const declineFriendRequest = async (friend_request_id: string) => {
+    try {
+      await updateRequest({ id: friend_request_id, status: "declined" });
+      setReloadList(true);
+
+      toast({
+        title: `Friend request was declined.`,
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: `Error when decline a friend request!`,
+      });
+    }
+  };
+
   return (
     <UserContext.Provider
       value={{
@@ -109,6 +148,8 @@ export function UserProvider({ children }: UserProviderData) {
         sendFriendRequest,
         removeFriendFromList,
         setReloadList,
+        acceptFriendRequest,
+        declineFriendRequest,
       }}
     >
       {children}

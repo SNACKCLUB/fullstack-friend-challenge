@@ -27,5 +27,20 @@ class FriendSeeder extends Seeder
                 'friend_request_id' => $friendRequest->id
             ]);
         }
+
+        // Create A friend pending requests for the second user
+        $friendRequests = FriendRequest::factory(1)->create([
+            'requested_user_id' => 1,
+            'user_id' => 2,
+            'status' => FriendRequestStatus::PENDING
+        ]);
+
+
+        // Create A friend pending requests for the third user
+        $friendRequests = FriendRequest::factory(1)->create([
+            'requested_user_id' => 1,
+            'user_id' => 3,
+            'status' => FriendRequestStatus::PENDING
+        ]);
     }
 }

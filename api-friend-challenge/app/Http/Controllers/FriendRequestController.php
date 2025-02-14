@@ -18,7 +18,7 @@ class FriendRequestController
 
     public function index(): JsonResponse
     {
-        return $this->response(Response::HTTP_OK, FriendRequestResource::collection(FriendRequest::get()));
+        return $this->response(Response::HTTP_OK, FriendRequestResource::collection(FriendRequest::filter()->get()));
     }
 
     public function store(StoreFriendRequestRequest $request): JsonResponse

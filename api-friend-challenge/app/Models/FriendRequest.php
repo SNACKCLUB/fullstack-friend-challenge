@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\OwnerScope;
+use App\Actions\Friend\CreateFriend;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,15 +10,21 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Auth;
 use App\Enums\FriendRequestStatus;
 use Illuminate\Database\Eloquent\Builder;
+use Mehradsadeghi\FilterQueryString\FilterQueryString;
 
 class FriendRequest extends Model
 {
     use HasFactory, HasUlids;
+    use FilterQueryString;
 
     protected $fillable = [
         'user_id',
         'requested_user_id',
         'status'
+    ];
+
+    protected $filters = [
+        'selection',
     ];
 
     protected function casts(): array
@@ -38,6 +44,25 @@ class FriendRequest extends Model
             $friendRequest->user_id ??= Auth::id();
             $friendRequest->status ??= FriendRequestStatus::PENDING;
         });
+
+        static::updating(function (FriendRequest $friendRequest) {
+            if ($friendRequest->status == FriendRequestStatus::ACCEPTED) {
+                CreateFriend::handle([
+                    'friend_request_id' => $friendRequest->id,
+                    'user_id' => $friendRequest->user_id,
+                    'friend_id' => $friendRequest->requested_user_id,
+                ]);
+            }
+        });
+    }
+
+    public function selection($query, $value)
+    {
+        if ($value === 'notification') {
+            return $query->with('user')->where('requested_user_id', Auth::id())->where('status', FriendRequestStatus::PENDING);
+        }
+
+        return $query;
     }
 
     public function scopeOwner(Builder $query): void

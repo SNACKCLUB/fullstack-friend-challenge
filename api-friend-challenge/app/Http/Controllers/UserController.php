@@ -11,6 +11,7 @@ use Illuminate\Http\Response;
 use App\Http\Resources\UserResource;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Support\Facades\Redis;
 
 class UserController
 {
@@ -18,7 +19,14 @@ class UserController
 
     public function index(): JsonResponse
     {
-        return $this->response(Response::HTTP_OK, UserResource::collection(User::filter()->get()));
+        $users = Redis::get('users');
+
+        if ($users) {
+            $users = User::filter()->get();
+            Redis::set('users', $users);
+        }
+
+        return $this->response(Response::HTTP_OK, UserResource::collection($users));
     }
 
     public function show(User $user)

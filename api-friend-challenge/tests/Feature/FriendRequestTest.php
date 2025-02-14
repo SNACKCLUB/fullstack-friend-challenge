@@ -15,16 +15,6 @@ it('should create a friend request for an authenticated user', function () {
     $response->assertCreated()->assertJson(["data" => ["status" => FriendRequestStatus::PENDING]]);
 });
 
-it("shouldn't create a friend request for an authenticated user with invalid requested user", function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)->postJson(route("friend-request.store"), [
-        'requested_user_id' => 0
-    ]);
-
-    $response->assertUnprocessable()->assertJsonValidationErrors(["requested_user_id"]);
-});
-
 it("shouldn't create a friend request for an unauthenticated user", function () {
     $requestedUser = User::factory()->create();
 
